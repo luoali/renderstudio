@@ -1336,7 +1336,7 @@ function showRound(idx) {
     document.getElementById('quoteBtn').classList.remove('disabled');
     document.getElementById('quoteBtn').style.display = '';
   }
-  const model = document.getElementById('modelSel').value;
+  const model = round.model || document.getElementById('modelSel').value;
   document.getElementById('metaModel').textContent = model;
   const displayRatio = (round.ratio === 'auto' || !round.ratio) ? '原图比例' : round.ratio;
   document.getElementById('metaParams').textContent = displayRatio + ' · ' + (round.res || '2K');
@@ -1347,6 +1347,7 @@ function showRound(idx) {
   } else {
     costEl.style.display = 'none';
   }
+
   updateCtxTag(idx);
 }
 
@@ -2162,7 +2163,8 @@ loadState(); updateApiUI(); updateStorageBar();
         ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font='14px sans-serif'; ctx.textAlign='center';
         ctx.fillText('Round ' + (i+1), 100, 82);
         const prompts = ['帮我把这张素模转成现代简约风格效果图，地面浅色石材有光泽感','金属收边再强一点，植物再茂盛些','整体色调偏冷，加强窗外景深感'];
-        demo.rounds.push({ imageData: c.toDataURL(), seed: 1000+i, ratio: '4:3', res: '2K', prompt: prompts[i], createdAt: Date.now() });
+        const demoCosts = [0.13, 0.11, 0.12];
+        demo.rounds.push({ imageData: c.toDataURL(), seed: 1000+i, ratio: '4:3', res: '2K', prompt: prompts[i], costUsd: demoCosts[i], model: 'gemini-3.1-flash-image-preview', createdAt: Date.now() });
       }
       demo.name = '示例画板（可删除）';
       state.activeRoundIdx = 2;
