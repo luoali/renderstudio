@@ -553,6 +553,9 @@ textarea.sys-ta:focus { outline: none; border-color: var(--border2); }
 <script>
 
 
+// ── API proxy ──
+const API_PROXY = 'https://rendersutdio.luoali21.workers.dev';
+
 // ── State ──
 let state = {
   apiKey: '',
@@ -901,10 +904,9 @@ document.getElementById('apiSaveBtn').onclick = async () => {
   const btn = document.getElementById('apiSaveBtn');
   btn.textContent = '测试中…'; btn.disabled = true;
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=${v}`;
-    const resp = await fetch(url, {
+    const resp = await fetch(`${API_PROXY}/v1beta/models/gemini-3-pro-image-preview:generateContent`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': v },
       body: JSON.stringify({
         contents: [{ role: 'user', parts: [{ text: 'hi' }] }],
         generationConfig: { maxOutputTokens: 8 }
@@ -2050,10 +2052,9 @@ async function generate() {
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 120000);
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.apiKey}`;
-    const resp = await fetch(url, {
+    const resp = await fetch(`${API_PROXY}/v1beta/models/${model}:generateContent`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': state.apiKey },
       body: JSON.stringify(payload),
       signal: controller.signal
     });
